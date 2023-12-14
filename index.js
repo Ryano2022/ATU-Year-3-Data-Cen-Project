@@ -26,17 +26,27 @@ app.get('/home', (req, res) => {
 
 // Go to the stores page.
 app.get('/stores', (req, res) => {
-  res.render('stores.ejs')
+  res.render('./stores/viewStores.ejs')
+})
+
+// Go to the edit stores page.
+app.get('/stores/edit', (req, res) => {
+  res.render('./stores/updateStore.ejs')
+})
+
+// Go to the add store page.
+app.get('/stores/new', (req, res) => {
+  res.render('./stores/newStore.ejs')
 })
 
 // Go to the products page.
 app.get('/products', (req, res) => {
-  res.render('products.ejs')
+  res.render('./products/viewProducts.ejs')
 })
 
 // Go to the managers page.
 app.get('/managers', (req, res) => {
-  res.render('managers.ejs')
+  res.render('./managers/viewManagers.ejs')
 })
 
 // Which port to listen to.
