@@ -19,8 +19,8 @@ pmysql.createPool({
 var getStores = function () {
   return new Promise((resolve, reject) => {
     pool.query('SELECT * FROM store')
-      .then((data) => {
-        resolve(data)
+      .then((stores) => {
+        resolve(stores)
       })
       .catch(error => {
         reject(error)
@@ -28,4 +28,16 @@ var getStores = function () {
   })
 }
 
-module.exports = {getStores}
+var getProducts = function () {
+  return new Promise((resolve, reject) => {
+    pool.query('SELECT * FROM product')
+      .then((products) => {
+        resolve(products)
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
+}
+
+module.exports = {getStores, getProducts}

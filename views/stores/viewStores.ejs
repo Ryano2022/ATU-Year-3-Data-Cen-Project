@@ -26,16 +26,19 @@
       </tr>
     </thead>
     <tbody>
-      <% data.forEach(function(data) { %>
+      <% stores.forEach((store)=> { %>
         <tr>
           <td>
-            <%= data.SID %>
+            <%= store.sid %>
           </td>
           <td>
-            <%= data.Location %>
+            <%= store.location %>
           </td>
           <td>
-            <%= data.ManagerID %>
+            <%= store.mgrid %>
+          </td>
+          <td>
+            <input type="button" value="Update">
           </td>
         </tr>
         <% }) %>
