@@ -7,6 +7,9 @@
   <br /><br /><br />
   <a href="http://localhost:3004/stores">Back to Stores</a>
   <br /> <br />
+  <div>
+    <p name="errorMsg" style="color: red;"></p>
+  </div>
   <div style="display: flex;">
     <div style="width: 100px;">
       SID <br />
@@ -20,7 +23,7 @@
         <input type="text" name="mgrid" value="<%= store.mgrid %>" /> <br />
         <br />
         <div style="display: flex; justify-content: center;">
-          <input type="submit" value="Update" />
+          <input type="submit" name="submit" value="Update" disabled="true" />
         </div>
       </form>
     </div>
@@ -29,6 +32,42 @@
 </body>
 
 <script>
+  // Disable the submit button if the input fields are empty.
+  const submitButton = document.getElementsByName('submit')[0];
+  const locationInput = document.getElementsByName('location')[0];
+  const mgridInput = document.getElementsByName('mgrid')[0];
+  const inputs = [locationInput, mgridInput];
+
+  inputs.forEach(input => {
+    input.addEventListener('keyup', () => {
+      // Disabling and enabling of the button.
+      if (locationInput.value.length > 0 && mgridInput.value.length > 0 && mgridInput.value.length <= 4) {
+        submitButton.disabled = false;
+      } 
+      else {
+        submitButton.disabled = true;
+      }
+
+      // Error messages.
+      // Manager ID must be 4 digits or less.
+      if (mgridInput.value.length > 4) {
+        document.getElementsByName('errorMsg')[0].innerHTML = "Manager ID must have no more than four characters.";
+      } 
+      else if (mgridInput.value.length <= 0) {
+        // Manager ID must be greater than 0.
+        document.getElementsByName('errorMsg')[0].innerHTML = "Manager ID must have more than zero characters.";
+      } 
+      else {
+        document.getElementsByName('errorMsg')[0].innerHTML = "";
+      }
+
+      // Location must have more than zero characters.
+      if (locationInput.value.length <= 0) {
+        document.getElementsByName('errorMsg')[0].innerHTML = "Location must have more than zero characters.";
+      }
+    });
+  });
+
   // Shortcut to go back to stores page.
   document.addEventListener('keydown', function (event) {
     if (event.key === "Escape") {
