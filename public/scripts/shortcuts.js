@@ -8,7 +8,7 @@ document.addEventListener('keydown', function (event) {
 
 // Shortcut to go products page.
 document.addEventListener('keydown', function (event) {
-  if (event.key === "2" || event.key === "numpad2" || event.key === "s") {
+  if (event.key === "2" || event.key === "numpad2" || event.key === "p") {
     console.log("Shortcut used to go products page.");
     window.location.href = "http://localhost:3004/products";
   }
