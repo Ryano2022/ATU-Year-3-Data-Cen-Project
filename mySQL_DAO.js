@@ -16,6 +16,7 @@ pmysql.createPool({
     console.log("pool error: " + e)
   })
 
+// Get all the stores.
 var getStores = function () {
   return new Promise((resolve, reject) => {
     pool.query('SELECT * FROM store')
@@ -28,6 +29,34 @@ var getStores = function () {
   })
 }
 
+// Find the specific store by ID.
+var getStoreById = function (storeId) {
+  return new Promise((resolve, reject) => {
+    pool.query('SELECT * FROM store WHERE sid = ?', [storeId])
+      .then((store) => {
+        resolve(store[0])
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
+}
+
+// Update the store.
+var updateStore = function (storeId, updatedStore) {
+  return new Promise((resolve, reject) => {
+    pool.query('UPDATE store SET location = ?, mgrid = ? WHERE sid = ?',
+      [updatedStore.location, updatedStore.mgrid, storeId])
+      .then(() => {
+        resolve() 
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
+}
+
+// Get all the products.
 var getProducts = function () {
   return new Promise((resolve, reject) => {
     pool.query('SELECT * FROM product')
@@ -40,4 +69,17 @@ var getProducts = function () {
   })
 }
 
-module.exports = {getStores, getProducts}
+// Get all the products stored.
+var getProducts_Store = function () {
+  return new Promise((resolve, reject) => {
+    pool.query('SELECT * FROM product_store')
+      .then((products_stored) => {
+        resolve(products_stored)
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
+}
+
+module.exports = {getStores, getStoreById, updateStore, getProducts, getProducts_Store}

@@ -11,9 +11,9 @@ mySQL_DAO = require('./mySQL_DAO.js')
 
 // Go to the default page.
 app.get('/', (req, res) => {
-  mySQL_DAO.getProducts()
-    .then((products) => {
-      res.send(products)
+  mySQL_DAO.getStores()
+    .then((stores) => {
+      res.send(stores)
     })
     .catch((error) => {
       res.send(error)
@@ -36,10 +36,34 @@ app.get('/stores', (req, res) => {
     })
 })
 
-// Go to the edit stores page.
-app.get('/stores/edit', (req, res) => {
-  res.render('./stores/updateStore.ejs')
-})
+// Edit a specific store.
+app.get('/stores/edit/:sid', (req, res) => {
+  var store = mySQL_DAO.getStoreById(req.params.sid)
+    .then((store) => {
+      if (store) {
+        res.render('./stores/updateStore.ejs', { "store": store });
+      } 
+      else {
+        res.send("Error: Store with ID " + req.params.sid + " not found.");
+      }
+    })
+    .catch((error) => {
+      res.send(error);
+    });
+});
+
+app.post('/stores/edit/:sid', (req, res) => {
+  var storeId = req.params.sid;
+  var updatedStore = req.body;
+
+  mySQL_DAO.updateStore(storeId, updatedStore)
+    .then(() => {
+      res.redirect('/stores');
+    })
+    .catch((error) => {
+      res.send(error);
+    });
+});
 
 // Go to the add store page.
 app.get('/stores/new', (req, res) => {
@@ -48,15 +72,14 @@ app.get('/stores/new', (req, res) => {
 
 // Go to the products page.
 app.get('/products', (req, res) => {
-  mySQL_DAO.getProducts()
-    .then((products) => {
-      console.log(products)
-      res.render('./products/viewProducts.ejs', { "products": products })
+  Promise.all([mySQL_DAO.getProducts(), mySQL_DAO.getProducts_Store()])
+    .then(([products, products_stored]) => {
+      res.render('./products/viewProducts.ejs', { "products": products, "products_stored": products_stored });
     })
     .catch((error) => {
-      res.send(error)
-    })
-})
+      res.send(error);
+    });
+});
 
 // Go to the managers page.
 app.get('/managers', (req, res) => {

@@ -1,3 +1,39 @@
 <head>
   <title>Editing a Store</title>
 </head>
+
+<body>
+  <h1>Editing a Store</h1>
+  <br /><br /><br />
+  <a href="http://localhost:3004/stores">Back to Stores</a>
+  <br /> <br />
+  <div style="display: flex;">
+    <div style="width: 100px;">
+      SID <br />
+      Location <br />
+      Manager ID <br />
+    </div>
+    <div style="width: 150px">
+      <form action="/stores/edit/<%= store.sid %>" method="POST">
+        <input type="text" name="sid" value="<%= store.sid %>" disabled="true" /> <br />
+        <input type="text" name="location" value="<%= store.location %>" /> <br />
+        <input type="text" name="mgrid" value="<%= store.mgrid %>" /> <br />
+        <br />
+        <div style="display: flex; justify-content: center;">
+          <input type="submit" value="Update" />
+        </div>
+      </form>
+    </div>
+  </div>
+  <a href="http://localhost:3004/home">Home</a>
+</body>
+
+<script>
+  // Shortcut to go back to stores page.
+  document.addEventListener('keydown', function (event) {
+    if (event.key === "Escape") {
+      console.log('Escape key was pressed!');
+      window.location.href = "http://localhost:3004/stores";
+    }
+  });
+</script>
