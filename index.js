@@ -3,11 +3,17 @@ var express = require('express')
 var app = express()
 var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
+
 // Required for EJS.
 let ejs = require('ejs');
 app.set('view engine', 'ejs')
+
 // Import mySQL DAO.
 mySQL_DAO = require('./mySQL_DAO.js')
+
+// Required for external scripts.
+const path = require('path');
+app.use('/public/scripts', express.static(path.join(__dirname, '/public/scripts')));
 
 // Go to the default page.
 app.get('/', (req, res) => {
