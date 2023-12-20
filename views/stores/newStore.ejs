@@ -1,13 +1,93 @@
 <head>
-  <title>Adding a new Store</title>
+  <title>Adding a New Store</title>
 </head>
 
 <body>
-  
+  <h1>Adding a New Store</h1>
+  <br /><br /><br />
+  <a href="http://localhost:3004/stores">Back to Stores</a>
+  <br /> <br />
+  <div>
+    <p name="errorMsg0" style="color: red;"></p> <!-- SID Error -->
+    <p name="errorMsg1" style="color: red;"></p> <!-- Location Error -->
+    <p name="errorMsg2" style="color: red;"></p> <!-- Manager ID Error -->
+  </div>
+  <div style="display: flex;">
+    <div style="width: 100px;">
+      SID <br />
+      Location <br />
+      Manager ID <br />
+    </div>
+    <div style="width: 150px">
+      <!-- Adding the values.  -->
+      <form action="/stores/new" method="POST">
+        <input type="text" name="sid" value="<%= newStore.sid %>"/> <br />
+        <input type="text" name="location" value="<%= newStore.location %>" /> <br />
+        <input type="text" name="mgrid" value="<%= newStore.mgrid %>" /> <br />
+        <br />
+        <div style="display: flex; justify-content: center;">
+          <input type="submit" name="submit" value="Add" disabled="true" /> <!-- Add button is disabled until certain conditions are met. -->
+        </div>
+      </form>
+    </div>
+  </div>
+  <a href="http://localhost:3004/home">Home</a>
 </body>
 
 <script>
-  // Shortcut to go back to store page.
+  // Disable the submit button if the input fields are empty.
+  const submitButton = document.getElementsByName('submit')[0];
+  const sidInput = document.getElementsByName('sid')[0];
+  const locationInput = document.getElementsByName('location')[0];
+  const mgridInput = document.getElementsByName('mgrid')[0];
+  const inputs = [sidInput, locationInput, mgridInput];
+
+  inputs.forEach(input => {
+    input.addEventListener('keyup', () => {
+      // Disabling and enabling of the button.
+      //
+      if (locationInput.value.length > 0 && mgridInput.value.length > 0 && mgridInput.value.length <= 4 && sidInput.value.length > 0 ) {
+        submitButton.disabled = false;
+      } 
+      else {
+        submitButton.disabled = true;
+      }
+
+      // Error messages.
+
+      // SID.
+      if (sidInput.value.length > 5) {
+        document.getElementsByName('errorMsg0')[0].innerHTML = "SID must have no more than five characters.";
+      } 
+      else if (sidInput.value.length <= 0) {
+        document.getElementsByName('errorMsg0')[0].innerHTML = "SID must have more than zero characters.";
+      } 
+      else {
+        document.getElementsByName('errorMsg0')[0].innerHTML = "";
+      }
+
+      // Location.
+      if (locationInput.value.length <= 0) {
+        document.getElementsByName('errorMsg1')[0].innerHTML = "Location must have more than zero characters.";
+      }
+      else {
+        document.getElementsByName('errorMsg1')[0].innerHTML = "";
+      }
+
+      // Manager ID.
+      if (mgridInput.value.length > 4) {
+        document.getElementsByName('errorMsg2')[0].innerHTML = "Manager ID must have no more than four characters.";
+      } 
+      else if (mgridInput.value.length <= 0) {
+        document.getElementsByName('errorMsg2')[0].innerHTML = "Manager ID must have more than zero characters.";
+      } 
+      else {
+        document.getElementsByName('errorMsg2')[0].innerHTML = "";
+      }
+    });
+  });
+
+  // Shortcut to go back to stores page.
   document.addEventListener('keydown', function (event) {
     if (event.key === "Escape") {
       console.log('Escape key was pressed!');

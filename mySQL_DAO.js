@@ -48,7 +48,21 @@ var updateStore = function (storeId, updatedStore) {
     pool.query('UPDATE store SET location = ?, mgrid = ? WHERE sid = ?',
       [updatedStore.location, updatedStore.mgrid, storeId])
       .then(() => {
-        resolve() 
+        resolve()
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
+}
+
+// Add a new store.
+var addStore = function (newStore) {
+  return new Promise((resolve, reject) => {
+    pool.query('INSERT INTO store (sid, location, mgrid) VALUES (?, ?, ?)',
+      [newStore.sid, newStore.location, newStore.mgrid])
+      .then(() => {
+        resolve()
       })
       .catch(error => {
         reject(error)
@@ -82,4 +96,4 @@ var getProducts_Store = function () {
   })
 }
 
-module.exports = {getStores, getStoreById, updateStore, getProducts, getProducts_Store}
+module.exports = {getStores, getStoreById, updateStore, addStore, getProducts, getProducts_Store}

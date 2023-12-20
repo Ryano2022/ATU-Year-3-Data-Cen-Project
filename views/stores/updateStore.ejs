@@ -8,7 +8,9 @@
   <a href="http://localhost:3004/stores">Back to Stores</a>
   <br /> <br />
   <div>
-    <p name="errorMsg" style="color: red;"></p>
+    <p name="errorMsg0" style="color: red;"></p> <!-- SID Error -->
+    <p name="errorMsg1" style="color: red;"></p> <!-- Location Error -->
+    <p name="errorMsg2" style="color: red;"></p> <!-- Manager ID Error -->
   </div>
   <div style="display: flex;">
     <div style="width: 100px;">
@@ -17,13 +19,14 @@
       Manager ID <br />
     </div>
     <div style="width: 150px">
+      <!-- Editing the values.  -->
       <form action="/stores/edit/<%= store.sid %>" method="POST">
-        <input type="text" name="sid" value="<%= store.sid %>" disabled="true" /> <br />
-        <input type="text" name="location" value="<%= store.location %>" /> <br />
-        <input type="text" name="mgrid" value="<%= store.mgrid %>" /> <br />
+        <input type="text" name="sid" value="<%= store.sid %>" disabled="true" /> <br /> <!-- SID is disabled. -->
+        <input type="text" name="location" value="<%= store.location %>" /> <br /> <!-- Location is editable. -->
+        <input type="text" name="mgrid" value="<%= store.mgrid %>" /> <br /> <!-- Manager ID is editable. -->
         <br />
         <div style="display: flex; justify-content: center;">
-          <input type="submit" name="submit" value="Update" disabled="true" />
+          <input type="submit" name="submit" value="Update" disabled="true" /> <!-- Update button is disabled until certain conditions are met. -->
         </div>
       </form>
     </div>
@@ -41,6 +44,7 @@
   inputs.forEach(input => {
     input.addEventListener('keyup', () => {
       // Disabling and enabling of the button.
+      // If the location and manager ID fields are not empty and the manager ID is 4 digits or less, enable the button.
       if (locationInput.value.length > 0 && mgridInput.value.length > 0 && mgridInput.value.length <= 4) {
         submitButton.disabled = false;
       } 
@@ -49,21 +53,26 @@
       }
 
       // Error messages.
-      // Manager ID must be 4 digits or less.
-      if (mgridInput.value.length > 4) {
-        document.getElementsByName('errorMsg')[0].innerHTML = "Manager ID must have no more than four characters.";
-      } 
-      else if (mgridInput.value.length <= 0) {
-        // Manager ID must be greater than 0.
-        document.getElementsByName('errorMsg')[0].innerHTML = "Manager ID must have more than zero characters.";
-      } 
+
+      // SID is disabled, so no need to check for errors.
+
+      // Location.
+      if (locationInput.value.length <= 0) {
+        document.getElementsByName('errorMsg1')[0].innerHTML = "Location must have more than zero characters.";
+      }
       else {
-        document.getElementsByName('errorMsg')[0].innerHTML = "";
+        document.getElementsByName('errorMsg1')[0].innerHTML = "";
       }
 
-      // Location must have more than zero characters.
-      if (locationInput.value.length <= 0) {
-        document.getElementsByName('errorMsg')[0].innerHTML = "Location must have more than zero characters.";
+      // Manager ID.
+      if (mgridInput.value.length > 4) {
+        document.getElementsByName('errorMsg2')[0].innerHTML = "Manager ID must have no more than four characters.";
+      } 
+      else if (mgridInput.value.length <= 0) {
+        document.getElementsByName('errorMsg2')[0].innerHTML = "Manager ID must have more than zero characters.";
+      } 
+      else {
+        document.getElementsByName('errorMsg2')[0].innerHTML = "";
       }
     });
   });

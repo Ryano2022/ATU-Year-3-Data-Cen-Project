@@ -2,14 +2,14 @@
 var express = require('express')
 var app = express()
 var bodyParser = require('body-parser')
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // Required for EJS.
 let ejs = require('ejs');
 app.set('view engine', 'ejs')
 
 // Import mySQL DAO.
-mySQL_DAO = require('./mySQL_DAO.js')
+const mySQL_DAO = require('./mySQL_DAO.js')
 
 // Required for external scripts.
 const path = require('path');
@@ -48,7 +48,7 @@ app.get('/stores/edit/:sid', (req, res) => {
     .then((store) => {
       if (store) {
         res.render('./stores/updateStore.ejs', { "store": store });
-      } 
+      }
       else {
         res.send("Error: Store with ID " + req.params.sid + " not found.");
       }
@@ -71,10 +71,24 @@ app.post('/stores/edit/:sid', (req, res) => {
     });
 });
 
-// Go to the add store page.
+// Add a new store.
 app.get('/stores/new', (req, res) => {
-  res.render('./stores/newStore.ejs')
-})
+  res.render('./stores/newStore.ejs', { newStore: {} });
+});
+
+app.post('/stores/new', (req, res) => {
+  var newStore = req.body;
+
+  mySQL_DAO.addStore(newStore)
+    .then(() => {
+      res.redirect('/stores');
+    })
+    .catch((error) => {
+      console.log(error);
+      res.send(error);
+    });
+});
+
 
 // Go to the products page.
 app.get('/products', (req, res) => {
@@ -89,6 +103,7 @@ app.get('/products', (req, res) => {
 
 // Go to the managers page.
 app.get('/managers', (req, res) => {
+  res.render('./managers/viewManagers.ejs')
 })
 
 // Which port to listen to.
