@@ -7,25 +7,48 @@
       border: 1px solid black;
     }
   </style>
+  <script src="../../public/scripts/shortcuts.js" type="module"></script>
 </head>
 
 <body>
   <h1>Products</h1>
   <br /><br /><br />
-
+  
   <!-- Table displaying all products. -->
   <table>
     <thead>
       <tr>
-        <th>Product ID</th>
+        <th>PID</th>
         <th>Description</th>
-        <th>Store ID</th>
+        <th>SID</th>
         <th>Location</th>
         <th>Price</th>
         <th>Action</th>
       </tr>
     </thead>
     <tbody>
+      <% products.forEach((product)=> { %>
+        <tr>
+          <td>
+            <%= product.pid %> <!-- Product ID -->
+          </td>
+          <td>
+            <%= product.productdesc %> <!-- Product Description -->
+          </td>
+          <td>
+            <%= product.sid %> <!-- Store ID -->
+          </td>
+          <td>
+            <%= product.location %> <!-- Store Location -->
+          </td>
+          <td>
+            €<%= product.Price %> <!-- Product Price -->
+          </td>
+          <td>
+            <a href="/products/delete/<%= product.pid %>">Delete <%= product.productdesc %></a> <!-- Delete link -->
+          </td>
+        </tr>
+      <% }) %>
     </tbody>
   </table>
   <br />

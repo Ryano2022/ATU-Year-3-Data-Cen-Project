@@ -1,3 +1,4 @@
+//////////////////////////////////////////// IMPORTS //////////////////////////////////////////
 // Required for express.
 var express = require('express')
 var app = express()
@@ -15,21 +16,25 @@ const mySQL_DAO = require('./mySQL_DAO.js')
 const path = require('path');
 app.use('/public/scripts', express.static(path.join(__dirname, '/public/scripts')));
 
+//////////////////////////////////////////// HOME ////////////////////////////////////////////
+
 // Go to the default page.
 app.get('/', (req, res) => {
-  mySQL_DAO.getStores()
-    .then((stores) => {
-      res.send(stores)
+  Promise.all([mySQL_DAO.getProducts(), mySQL_DAO.getProducts_Store()])
+    .then(([products, products_stored]) => {
+      res.send(products_stored);
     })
     .catch((error) => {
-      res.send(error)
-    })
+      res.send(error);
+    });
 })
 
 // Go to the home page.
 app.get('/home', (req, res) => {
   res.render('home.ejs')
 })
+
+//////////////////////////////////////////// STORES //////////////////////////////////////////
 
 // Go to the stores page.
 app.get('/stores', (req, res) => {
@@ -89,22 +94,28 @@ app.post('/stores/new', (req, res) => {
     });
 });
 
+//////////////////////////////////////////// PRODUCTS ////////////////////////////////////////
 
 // Go to the products page.
 app.get('/products', (req, res) => {
-  Promise.all([mySQL_DAO.getProducts(), mySQL_DAO.getProducts_Store()])
-    .then(([products, products_stored]) => {
-      res.render('./products/viewProducts.ejs', { "products": products, "products_stored": products_stored });
+  mySQL_DAO.getProducts()
+    .then((products) => {
+      res.render('./products/viewProducts.ejs', { "products": products });
     })
     .catch((error) => {
       res.send(error);
     });
 });
 
+//////////////////////////////////////////// MANAGERS ////////////////////////////////////////
+
 // Go to the managers page.
 app.get('/managers', (req, res) => {
   res.render('./managers/viewManagers.ejs')
 })
+
+
+//////////////////////////////////////////// OTHER ///////////////////////////////////////////
 
 // Which port to listen to.
 app.listen(3004, () => {

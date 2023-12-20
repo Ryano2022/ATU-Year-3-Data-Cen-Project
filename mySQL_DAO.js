@@ -73,7 +73,7 @@ var addStore = function (newStore) {
 // Get all the products.
 var getProducts = function () {
   return new Promise((resolve, reject) => {
-    pool.query('SELECT * FROM product')
+    pool.query('SELECT * FROM product INNER JOIN product_store ON product.pid = product_store.pid')
       .then((products) => {
         resolve(products)
       })
@@ -83,17 +83,4 @@ var getProducts = function () {
   })
 }
 
-// Get all the products stored.
-var getProducts_Store = function () {
-  return new Promise((resolve, reject) => {
-    pool.query('SELECT * FROM product_store')
-      .then((products_stored) => {
-        resolve(products_stored)
-      })
-      .catch(error => {
-        reject(error)
-      })
-  })
-}
-
-module.exports = {getStores, getStoreById, updateStore, addStore, getProducts, getProducts_Store}
+module.exports = { getStores, getStoreById, updateStore, addStore, getProducts }
