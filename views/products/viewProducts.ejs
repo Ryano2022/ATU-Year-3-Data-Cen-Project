@@ -45,7 +45,7 @@
             €<%= product.Price %> <!-- Product Price -->
           </td>
           <td>
-            <a href="/products/delete/<%= product.pid %>">Delete <%= product.productdesc %></a> <!-- Delete link -->
+            <a href="/products/delete/<%= product.pid %>" onclick="return confirm('Are you sure you\'d like to delete this?')">Delete <%= product.productdesc %></a> <!-- Delete link -->
           </td>
         </tr>
       <% }) %>

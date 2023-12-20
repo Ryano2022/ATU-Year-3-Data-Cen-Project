@@ -107,6 +107,20 @@ app.get('/products', (req, res) => {
     });
 });
 
+// Delete a product.
+app.get('/products/delete/:pid', (req, res) => {
+  var productId = req.params.pid;
+
+  mySQL_DAO.deleteProduct(productId)
+    .then(() => {
+      res.redirect('/products');
+    })
+    .catch((error) => {
+      res.send(error);
+    });
+});
+
+
 //////////////////////////////////////////// MANAGERS ////////////////////////////////////////
 
 // Go to the managers page.
