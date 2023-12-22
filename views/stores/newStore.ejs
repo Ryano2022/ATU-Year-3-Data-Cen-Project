@@ -26,7 +26,7 @@
         <input type="text" name="mgrid" value="<%= newStore.mgrid %>" /> <br />
         <br />
         <div style="display: flex; justify-content: center;">
-          <input type="submit" name="submit" value="Add" disabled="true" /> <!-- Add button is disabled until certain conditions are met. -->
+          <input type="submit" id="submit" value="Add" disabled="true" /> <!-- Add button is disabled until certain conditions are met. -->
         </div>
       </form>
     </div>
@@ -36,7 +36,7 @@
 
 <script>
   // Disable the submit button if the input fields are empty.
-  const submitButton = document.getElementsByName('submit')[0];
+  const submitButton = document.getElementById('submit');
   const sidInput = document.getElementsByName('sid')[0];
   const locationInput = document.getElementsByName('location')[0];
   const mgridInput = document.getElementsByName('mgrid')[0];
