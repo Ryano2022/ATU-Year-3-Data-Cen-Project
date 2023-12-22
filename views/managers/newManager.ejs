@@ -1,0 +1,89 @@
+<head>
+  <title>Adding a New Manager</title>
+</head>
+
+<body>
+  <h1>Adding a New Manager</h1>
+  <br /><br /><br />
+  <a href="http://localhost:3004/managers">Back to Managers</a>
+  <br /> <br />
+  <div>
+    <p name="errorMsg0" style="color: red;"></p> <!-- MID Error -->
+    <p name="errorMsg1" style="color: red;"></p> <!-- Name Error -->
+    <p name="errorMsg2" style="color: red;"></p> <!-- Salary Error -->
+  </div>
+  <div style="display: flex;">
+    <div style="width: 100px;">
+      MID <br />
+      Name <br />
+      Salary <br />
+    </div>
+    <div style="width: 150px">
+      <!-- Adding the values.  -->
+      <form action="/managers/new" method="POST">
+        <input type="text" name="_id" value="<%= newManager._id %>" /> <br />
+        <input type="text" name="name" value="<%= newManager.name %>" /> <br />
+        <input type="number" name="salary" value="<%= newManager.salary %>" /> <br />
+        <br />
+      <div style="display: flex; justify-content: center;">
+        <input type="submit" id="submit" value="Add" disabled="true" /> <!-- Add button is disabled until certain conditions are met. -->
+      </div>
+      </form>
+    </div>
+  </div>
+  <a href="http://localhost:3004/home">Home</a>
+</body>
+
+<script>
+  // Disable the submit button if the input fields are empty.
+  const submitButton = document.getElementById("submit");
+  const midInput = document.getElementsByName("_id")[0];
+  const nameInput = document.getElementsByName("name")[0];
+  const salaryInput = document.getElementsByName("salary")[0];
+  const inputs = [midInput, nameInput, salaryInput];
+
+  inputs.forEach(input => {
+    input.addEventListener("keyup", () => {
+      // Disabling and enabling of the button.
+      if (midInput.value.length == 4 && nameInput.value.length >= 5 && parseInt(salaryInput.value) >= 30000 && parseInt(salaryInput.value) <= 70000) {
+        submitButton.disabled = false; // Enabled
+      } else {
+        submitButton.disabled = true; // Disabled
+      }
+
+      // Error messages.
+
+      // MID.
+      if (midInput.value.length != 4) {
+        document.getElementsByName("errorMsg0")[0].innerHTML = "MID must have four characters.";
+      }
+      else {
+        document.getElementsByName("errorMsg0")[0].innerHTML = "";
+      }
+
+      // Name.
+      if (nameInput.value.length < 5) {
+        document.getElementsByName("errorMsg1")[0].innerHTML = "Name must be greater than five characters.";
+      }
+      else {
+        document.getElementsByName("errorMsg1")[0].innerHTML = "";
+      }
+
+      // Salary.
+      if (parseInt(salaryInput.value) < 30000 || parseInt(salaryInput.value) > 70000) {
+        document.getElementsByName("errorMsg2")[0].innerHTML = "Salary must be between 30,000 and 70,000.";
+      }
+      else {
+        document.getElementsByName("errorMsg2")[0].innerHTML = "";
+      }
+    });
+  });
+
+  // Shortcut to go back to managers page.
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      console.log("Escape key was pressed!");
+      window.location.href = "http://localhost:3004/managers";
+    }
+  });
+</script>

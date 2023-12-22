@@ -9,8 +9,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 let ejs = require('ejs');
 app.set('view engine', 'ejs')
 
-// Import mySQL DAO.
+// Import DAO.
 const mySQL_DAO = require('./mySQL_DAO.js')
+const mongoDB_DAO = require('./mongoDB_DAO.js')
 
 // Required for external scripts.
 const path = require('path');
@@ -20,9 +21,9 @@ app.use('/public/scripts', express.static(path.join(__dirname, '/public/scripts'
 
 // Go to the default page.
 app.get('/', (req, res) => {
-  Promise.all([mySQL_DAO.getProducts(), mySQL_DAO.getProducts_Store()])
-    .then(([products, products_stored]) => {
-      res.send(products_stored);
+  mySQL_DAO.getProducts()
+    .then((products) => {
+      res.send(products);
     })
     .catch((error) => {
       res.send(error);
@@ -55,7 +56,7 @@ app.get('/stores/edit/:sid', (req, res) => {
         res.render('./stores/updateStore.ejs', { "store": store });
       }
       else {
-        res.send("Error: Store with ID " + req.params.sid + " not found.");
+        res.send("<h1>Error</h1><p>The store with ID " + req.params.sid + " is not found. </p><a href='/stores'>Back to Stores</a>");
       }
     })
     .catch((error) => {
@@ -125,9 +126,46 @@ app.get('/products/delete/:pid', (req, res) => {
 
 // Go to the managers page.
 app.get('/managers', (req, res) => {
-  res.render('./managers/viewManagers.ejs')
+  mongoDB_DAO.getManagers()
+    .then((documents) => {
+      // Process documents
+      res.render('./managers/viewManagers.ejs', { "documents": documents })
+    })
+    .catch((error) => {
+      // Handle error
+      res.send(error)
+    })
 })
 
+// Add a new manager.
+app.get('/managers/new', (req, res) => {
+  res.render('./managers/newManager.ejs', { newManager: {} });
+});
+
+app.post('/managers/new', (req, res) => {
+  var newManager = req.body;
+
+  // Check if the manager already exists.
+  mongoDB_DAO.existingManager(newManager)
+    .then((exists) => {
+      if (exists) {
+        res.send("<h1>Error</h1><p>The manager named " + newManager.name + " already exists.</p><a href='/managers'>Back to Managers</a>");
+      } else {
+        mongoDB_DAO.addManager(newManager)
+          .then(() => {
+            res.redirect('/managers');
+          })
+          .catch((error) => {
+            console.log(error);
+            res.send(error);
+          });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      res.send(error);
+    });
+});
 
 //////////////////////////////////////////// OTHER ///////////////////////////////////////////
 

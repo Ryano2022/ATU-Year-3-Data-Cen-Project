@@ -7,16 +7,17 @@
       border: 1px solid black;
     }
   </style>
+  <script src="../../public/scripts/shortcuts.js" type="module"></script>
 </head>
 
 <body>
-  <h1>Products</h1>
+  <h1>Managers</h1>
   <br /><br /><br />
 
   <a href="http://localhost:3004/managers/new">New Manager</a>
   <br /><br />
 
-  <!-- Table displaying all products. -->
+  <!-- Table displaying all managers. -->
   <table>
     <thead>
       <tr>
@@ -26,6 +27,19 @@
       </tr>
     </thead>
     <tbody>
+      <% documents.forEach((document)=> { %>
+        <tr>
+          <td>
+            <%= document._id %> <!-- MID -->
+          </td>
+          <td>
+            <%= document.name %> <!-- Name -->
+          </td>
+          <td>
+            <%= document.salary %> <!-- Salary -->
+          </td>
+        </tr>
+        <% }) %>
     </tbody>
   </table>
   <br />
